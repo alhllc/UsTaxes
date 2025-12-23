@@ -704,7 +704,8 @@ export class Arbitraries {
           stateResidencies: [{ state }],
           healthSavingsAccounts,
           credits,
-          individualRetirementArrangements
+          individualRetirementArrangements,
+          scheduleCs: []
         })
       )
 }

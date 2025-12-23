@@ -21,7 +21,8 @@ export const blankState: Information = {
   stateResidencies: [],
   healthSavingsAccounts: [],
   credits: [],
-  individualRetirementArrangements: []
+  individualRetirementArrangements: [],
+  scheduleCs: []
 }
 
 const formReducer = (

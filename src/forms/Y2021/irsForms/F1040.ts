@@ -122,6 +122,12 @@ export default class F1040 extends F1040Base {
     this.scheduleEIC = new ScheduleEIC(this)
     this.scheduleSE = new ScheduleSE(this)
 
+    // We instantiate the first Schedule C if available.
+    // Additional copies are handled by the `copies` method in ScheduleC.
+    if (this.info.scheduleCs.length > 0) {
+        this.scheduleC = new ScheduleC(this, this.info.scheduleCs[0], 0)
+    }
+
     this.schedule1 = new Schedule1(this)
     this.schedule2 = new Schedule2(this)
     this.schedule3 = new Schedule3(this)
@@ -188,6 +194,7 @@ export default class F1040 extends F1040Base {
     const res1: (F1040Attachment | undefined)[] = [
       this.scheduleA,
       this.scheduleB,
+      this.scheduleC,
       this.scheduleD,
       this.scheduleE,
       this.scheduleSE,
