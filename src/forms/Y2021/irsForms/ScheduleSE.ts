@@ -8,6 +8,7 @@ export default class ScheduleSE extends F1040Attachment {
   sequenceIndex = 14
 
   isNeeded = (): boolean =>
+    this.l2() > 0 ||
     this.f1040.info.scheduleK1Form1065s
       .map(
         (k1) =>
@@ -42,12 +43,18 @@ export default class ScheduleSE extends F1040Attachment {
   l1b = (): number => 0
 
   l2 = (): number => {
+    const schCL31 = sumFields(
+      this.f1040.info.scheduleCs.map((_, i) => {
+        if (i === 0) return this.f1040.scheduleC?.l31()
+        return this.f1040.scheduleC?.copies()[i - 1]?.l31()
+      })
+    )
     const schFL34 = 0 // TODO: Net farm profit or (loss) from Schedule F, line 34
     const k1B14 = this.f1040.info.scheduleK1Form1065s.reduce(
       (c, k1) => c + k1.selfEmploymentEarningsA,
       0
     )
-    return schFL34 + k1B14
+    return schCL31 + schFL34 + k1B14
   }
 
   l3 = (): number => sumFields([this.l1a(), this.l1b(), this.l2()])

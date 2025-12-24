@@ -3,8 +3,8 @@ import ScheduleC from '../irsForms/ScheduleC'
 import { create1040 } from '../irsForms/Main'
 import { PersonRole, ScheduleC as ScheduleCData, Information } from 'ustaxes/core/data'
 import { blankState } from 'ustaxes/redux/reducer'
-import F1040 from '../irsForms/F1040'
 import { isLeft } from 'ustaxes/core/util'
+import F1040 from '../irsForms/F1040'
 
 // TestKit doesn't export describe/it/expect, so we use global Jest ones
 // or import from @jest/globals if needed, but in CRA environment they are global.
@@ -141,5 +141,42 @@ describe('ScheduleC', () => {
       expect(copies).toHaveLength(1)
       expect(copies[0]).toBeInstanceOf(ScheduleC)
       expect(copies[0].businessName()).toBe('Second Business')
+  })
+
+  it('should sum net profit from multiple Schedule Cs into Schedule 1', () => {
+      const secondBiz: ScheduleCData = {
+          ...defaultScheduleC,
+          businessName: 'Second Business',
+          grossReceipts: 5000,
+          expenses: {} // 5000 profit
+      }
+      // defaultScheduleC profit is 4200
+
+      const f1040 = getF1040({
+          scheduleCs: [defaultScheduleC, secondBiz]
+      })
+
+      const s1 = f1040.schedule1
+      // 4200 + 5000 = 9200
+      expect(s1.l3()).toBe(9200)
+  })
+
+  it('should sum net profit from multiple Schedule Cs into Schedule SE', () => {
+      const secondBiz: ScheduleCData = {
+          ...defaultScheduleC,
+          businessName: 'Second Business',
+          grossReceipts: 5000,
+          expenses: {} // 5000 profit
+      }
+      // defaultScheduleC profit is 4200
+
+      const f1040 = getF1040({
+          scheduleCs: [defaultScheduleC, secondBiz]
+      })
+
+      const se = f1040.scheduleSE
+      // 4200 + 5000 = 9200
+      // L2 is Net Profit from Sch C
+      expect(se.l2()).toBe(9200)
   })
 })
