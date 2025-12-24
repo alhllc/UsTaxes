@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import { Message, useForm, useWatch, FormProvider, useFieldArray } from 'react-hook-form'
+import { Message, useForm, useWatch, FormProvider, useFieldArray, Controller } from 'react-hook-form'
 import { useDispatch } from 'ustaxes/redux'
 import { useYearSelector } from 'ustaxes/redux/yearDispatch'
 import { useSelector } from 'react-redux'
@@ -17,7 +17,10 @@ import {
   ScheduleCExpenseType,
   ScheduleCExpenseTypeName,
   PersonRole,
-  TaxYear
+  TaxYear,
+  CostOfGoods,
+  VehicleExpense,
+  HomeOffice
 } from 'ustaxes/core/data'
 import { YearsTaxesState } from 'ustaxes/redux'
 import AddressFields from 'ustaxes/components/TaxPayer/Address'
@@ -33,6 +36,9 @@ import { BusinessOutlined, Add, Remove } from '@material-ui/icons'
 import { FormListContainer } from 'ustaxes/components/FormContainer'
 import { Grid, Button, IconButton } from '@material-ui/core'
 import _ from 'lodash'
+import { HomeOfficeInput } from './scheduleC_modules/HomeOfficeInput'
+import { COGSInput } from './scheduleC_modules/COGSInput'
+import { VehicleInput } from './scheduleC_modules/VehicleInput'
 
 // Helper types for the form
 interface ScheduleCForm {
@@ -51,6 +57,9 @@ interface ScheduleCForm {
   otherIncome: number
   expenses: Partial<{ [K in ScheduleCExpenseTypeName]: number }>
   otherExpenses: { description: string; amount: number }[]
+  costOfGoods?: CostOfGoods
+  vehicleExpenses?: VehicleExpense[]
+  homeOffice?: HomeOffice
 }
 
 const blankScheduleCForm: ScheduleCForm = {
@@ -63,7 +72,10 @@ const blankScheduleCForm: ScheduleCForm = {
   costOfGoodsSold: 0,
   otherIncome: 0,
   expenses: {},
-  otherExpenses: []
+  otherExpenses: [],
+  costOfGoods: undefined,
+  vehicleExpenses: undefined,
+  homeOffice: undefined
 }
 
 const displayExpense = (k: ScheduleCExpenseType): string => {
@@ -237,6 +249,22 @@ export default function ScheduleCPage(): ReactElement {
         />
       </Grid>
 
+      <hr className="my-6" />
+
+      {/* COGS Module Injection */}
+      <Controller
+        name="costOfGoods"
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <COGSInput
+            data={value}
+            onChange={onChange}
+          />
+        )}
+      />
+
+      <hr className="my-6" />
+
       <h3>Expenses</h3>
       <Grid container spacing={2}>
         {_.chain(expenseFields)
@@ -250,6 +278,35 @@ export default function ScheduleCPage(): ReactElement {
           )
           .value()}
       </Grid>
+
+      <hr className="my-6" />
+
+      {/* Vehicle Module Injection */}
+      <Controller
+        name="vehicleExpenses"
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <VehicleInput
+            data={value}
+            onChange={onChange}
+          />
+        )}
+      />
+
+      <hr className="my-6" />
+
+      {/* Home Office Module Injection */}
+      <Controller
+        name="homeOffice"
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <HomeOfficeInput
+            data={value}
+            onChange={onChange}
+          />
+        )}
+      />
+
       <h4>Other Expenses</h4>
       <Grid container spacing={2}>
         {otherExpenseFields.map((field, index) => (
