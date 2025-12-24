@@ -549,7 +549,7 @@ const scheduleC: Arbitrary<types.ScheduleC> = fc.tuple(
   fc.option(fc.array(vehicleExpense)),
   fc.option(homeOffice)
 ).map(([personRole, businessName, businessAddress, businessCode, ein, accountingMethod, accountingMethodOther, materiallyParticipate, startedCurrentYear, grossReceipts, returnsAndAllowances, costOfGoodsSold, otherIncome, expenses, otherExpenses, costOfGoods, vehicleExpenses, homeOffice]) => ({
-  personRole,
+  personRole: personRole as types.PersonRole.PRIMARY | types.PersonRole.SPOUSE,
   businessName,
   businessAddress,
   businessCode,
