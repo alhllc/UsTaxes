@@ -71,7 +71,8 @@ const baseInformation: ValidatedInformation = {
   questions: {},
   f1098es: [],
   stateResidencies: [{ state: 'AL' }],
-  healthSavingsAccounts: []
+  healthSavingsAccounts: [],
+  scheduleCs: []
 }
 
 describe('Health Savings Accounts', () => {
