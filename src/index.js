@@ -17,7 +17,7 @@ ReactDOM.render(
         loading={<h1>Loading from Local Storage</h1>}
         persistor={persistor}
       >
-        <Router>
+        <Router basename={process.env.PUBLIC_URL || '/'}>
           <App />
         </Router>
       </PersistGate>

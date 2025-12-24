@@ -1,7 +1,12 @@
 
 import ScheduleC from '../irsForms/ScheduleC'
 import { create1040 } from '../irsForms/Main'
-import { PersonRole, ScheduleC as ScheduleCData, Information } from 'ustaxes/core/data'
+import {
+  FilingStatus,
+  PersonRole,
+  ScheduleC as ScheduleCData,
+  Information
+} from 'ustaxes/core/data'
 import { blankState } from 'ustaxes/redux/reducer'
 import { isLeft } from 'ustaxes/core/util'
 import F1040 from '../irsForms/F1040'
@@ -33,7 +38,7 @@ describe('ScheduleC', () => {
         ...blankState,
         taxPayer: {
             ...blankState.taxPayer,
-            filingStatus: 'S',
+            filingStatus: FilingStatus.S,
             primaryPerson: {
                 firstName: 'Test',
                 lastName: 'User',
