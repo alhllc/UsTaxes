@@ -559,10 +559,57 @@ export interface Credit {
   type: CreditType
 }
 
+export enum ScheduleCExpenseType {
+  advertising,
+  carAndTruck,
+  commissions,
+  contractLabor,
+  depletion,
+  depreciation,
+  employeeBenefitPrograms,
+  insurance,
+  mortgageInterest,
+  otherInterest,
+  legalAndProfessional,
+  officeExpense,
+  pensionAndProfitSharing,
+  rentOrLeaseVehicles,
+  rentOrLeaseOther,
+  repairsAndMaintenance,
+  supplies,
+  taxesAndLicenses,
+  travel,
+  meals,
+  utilities,
+  wages,
+  other
+}
+
+export type ScheduleCExpenseTypeName = keyof typeof ScheduleCExpenseType
+
+export interface ScheduleC {
+  personRole: PersonRole.PRIMARY | PersonRole.SPOUSE
+  businessName?: string
+  businessAddress?: Address
+  businessCode?: string
+  ein?: string
+  accountingMethod: 'Cash' | 'Accrual' | 'Other'
+  accountingMethodOther?: string
+  materiallyParticipate: boolean
+  startedCurrentYear: boolean
+  grossReceipts: number
+  returnsAndAllowances: number
+  costOfGoodsSold: number
+  otherIncome: number
+  expenses: Partial<{ [K in ScheduleCExpenseTypeName]: number }>
+  otherExpenses: { description: string; amount: number }[]
+}
+
 export interface Information<D = Date> {
   f1099s: Supported1099[]
   w2s: IncomeW2[]
   realEstate: Property[]
+  scheduleCs: ScheduleC[]
   estimatedTaxes: EstimatedTaxPayments[]
   f1098es: F1098e[]
   f3921s: F3921[]
@@ -642,3 +689,4 @@ export type EditF3921Action = ArrayItemEditAction<F3921>
 export type EditScheduleK1Form1065Action =
   ArrayItemEditAction<ScheduleK1Form1065>
 export type EditCreditAction = ArrayItemEditAction<Credit>
+export type EditScheduleCAction = ArrayItemEditAction<ScheduleC>
