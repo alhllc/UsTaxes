@@ -9,6 +9,7 @@ Successfully implemented Schedule C support for Tax Year 2021.
 - Support for multiple Schedule C attachments.
 - Redux actions and reducers added for managing Schedule C data.
 - Validation logic generated.
+- Integration with Schedule 1 (Line 3), Schedule SE (Line 2), and Form 8995 (QBI).
 
 ## Testing
 - Unit tests added in `src/forms/Y2021/tests/ScheduleC.test.ts` verifying:
@@ -16,6 +17,7 @@ Successfully implemented Schedule C support for Tax Year 2021.
     - Gross Income calculations (Part I).
     - Total Expense calculations (Part II).
     - Net Profit calculations (Line 31).
+    - **Integration:** Verified that multiple Schedule Cs correctly sum into Schedule 1 and Schedule SE.
 - Existing regression tests passed.
 
 ## Normalized Schema for User Transaction Data

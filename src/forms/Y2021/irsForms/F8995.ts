@@ -40,10 +40,21 @@ export default class F8995 extends F1040Attachment {
     return rtn
   }
 
-  l2 = (): number | undefined =>
-    this.applicableK1s()
+  l2 = (): number | undefined => {
+    const k1s = this.applicableK1s()
       .map((k1) => k1.section199AQBI)
       .reduce((c, a) => c + a, 0)
+
+    // Add Schedule C QBI
+    // Note: This is a simplification. QBI calculation is complex and needs more inputs.
+    // For now, we assume Net Profit is QBI if positive.
+    const schedCQBI = (this.f1040.scheduleC?.copies() ?? [])
+      .map((sc) => sc.l31() ?? 0)
+      .concat(this.f1040.scheduleC?.l31() ?? 0)
+      .reduce((a, b) => a + Math.max(0, b), 0) ?? 0
+
+    return k1s + schedCQBI
+  }
   l3 = (): number | undefined => undefined
   l4 = (): number | undefined =>
     ifNumber(this.l2(), (num) => num + (this.l3() ?? 0))

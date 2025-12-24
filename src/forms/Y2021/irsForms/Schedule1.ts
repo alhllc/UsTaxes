@@ -25,7 +25,13 @@ export default class Schedule1 extends F1040Attachment {
   l1 = (): number | undefined => undefined
   l2a = (): number | undefined => undefined
   l2b = (): number | undefined => undefined
-  l3 = (): number | undefined => undefined
+  l3 = (): number | undefined =>
+    sumFields(
+      this.f1040.info.scheduleCs.map((_, i) => {
+        if (i === 0) return this.f1040.scheduleC?.l31()
+        return this.f1040.scheduleC?.copies()[i - 1]?.l31()
+      })
+    )
   l4 = (): number | undefined => undefined
   l5 = (): number | undefined => this.f1040.scheduleE.l41()
   l6 = (): number | undefined => undefined
