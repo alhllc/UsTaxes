@@ -42,6 +42,7 @@ import IRA from './savingsAccounts/IRA'
 import OtherInvestments from './income/OtherInvestments'
 import { StockOptions } from './income/StockOptions'
 import { PartnershipIncome } from './income/PartnershipIncome'
+import ScheduleCPage from './income/ScheduleC'
 import { TaxYear } from 'ustaxes/core/data'
 import { AdvanceChildTaxCredit } from './Y2021/AdvanceChildTaxCredit'
 import { YearsTaxesState } from 'ustaxes/redux'
@@ -135,6 +136,11 @@ export const drawerSections: Section[] = [
         'Partnership Income',
         Urls.income.partnershipIncome,
         <PartnershipIncome />
+      ),
+      item(
+        'Self-Employment (Schedule C)',
+        Urls.income.scheduleC,
+        <ScheduleCPage />
       )
     ]
   },
