@@ -1,0 +1,294 @@
+npm warn Unknown project config "//.npmrc file". This will stop working in the next major version of npm.
+
+> ustaxes@0.1.23 start
+> node ./notice.js && ts-node ./scripts/env.ts && ts-node ./scripts/setup.ts && concurrently npm:dev
+
+
+    ustaxes helps you build your tax return forms for free
+    Copyright (C) 2025  Aidan Grimshaw and contributors
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+[dev] npm warn Unknown project config "//.npmrc file". This will stop working in the next major version of npm.
+[dev]
+[dev] > ustaxes@0.1.23 dev
+[dev] > craco start
+[dev]
+[dev] (node:6926) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+[dev] (Use `node --trace-deprecation ...` to show where the warning was created)
+[dev] (node:6926) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+[dev] Starting the development server...
+[dev]
+[dev] Failed to compile.
+[dev]
+[dev] Module not found: Error: Can't resolve 'styled-components' in '/app/node_modules/react-data-table-component/dist'
+[dev] WARNING in [eslint]
+[dev] src/components/income/ScheduleC.tsx
+[dev]   Line 2:10:    'Message' is defined but never used          @typescript-eslint/no-unused-vars
+[dev]   Line 5:10:    'useSelector' is defined but never used      @typescript-eslint/no-unused-vars
+[dev]   Line 20:3:    'TaxYear' is defined but never used          @typescript-eslint/no-unused-vars
+[dev]   Line 22:10:   'YearsTaxesState' is defined but never used  @typescript-eslint/no-unused-vars
+[dev]   Line 118:34:  'watch' is assigned a value but never used   @typescript-eslint/no-unused-vars
+[dev]
+[dev] src/forms/Y2021/irsForms/F8995.ts
+[dev]   Line 51:23:  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+[dev]
+[dev] src/forms/Y2021/irsForms/ScheduleC.ts
+[dev]   Line 187:11:  Unnecessary conditional, value is always truthy  @typescript-eslint/no-unnecessary-condition
+[dev]
+[dev] src/redux/reducer.ts
+[dev]   Line 419:26:  Unnecessary conditional, value is always truthy  @typescript-eslint/no-unnecessary-condition
+[dev]   Line 423:34:  Unnecessary conditional, value is always truthy  @typescript-eslint/no-unnecessary-condition
+[dev]   Line 431:34:  Unnecessary conditional, value is always truthy  @typescript-eslint/no-unnecessary-condition
+[dev]
+[dev] ERROR in ./node_modules/react-data-table-component/dist/index.cjs.js 7:6-34
+[dev] Module not found: Error: Can't resolve 'styled-components' in '/app/node_modules/react-data-table-component/dist'
+[dev]
+[dev] ERROR in [eslint]
+[dev] src/forms/Y2021/irsForms/ScheduleC.ts
+[dev]   Line 18:50:  Type number trivially inferred from a number literal, remove type annotation  @typescript-eslint/no-inferrable-types
+[dev]
+[dev] Search for the keywords to learn more about each error.
+[dev]
+[dev] webpack compiled with 2 errors and 1 warning
+[dev] ERROR in src/components/income/ScheduleC.tsx:99:3
+[dev] TS2322: Type '{ grossReceipts: number; returnsAndAllowances: number; costOfGoodsSold: number; otherIncome: number; expenses: Partial<{ other: number; advertising: number; commissions: number; insurance: number; ... 18 more ...; wages: number; }>; ... 9 more ...; startedCurrentYear: boolean; }' is not assignable to type 'ScheduleC'.
+[dev]   Types of property 'personRole' are incompatible.
+[dev]     Type 'PersonRole' is not assignable to type 'PersonRole.PRIMARY | PersonRole.SPOUSE'.
+[dev]      97 |
+[dev]      98 | const toScheduleC = (formData: ScheduleCForm): ScheduleC => {
+[dev]   >  99 |   return {
+[dev]         |   ^^^^^^^^
+[dev]   > 100 |     ...formData,
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 101 |     grossReceipts: Number(formData.grossReceipts),
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 102 |     returnsAndAllowances: Number(formData.returnsAndAllowances),
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 103 |     costOfGoodsSold: Number(formData.costOfGoodsSold),
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 104 |     otherIncome: Number(formData.otherIncome),
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 105 |     expenses: Object.fromEntries(
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 106 |       Object.entries(formData.expenses).map(([k, v]) => [k, Number(v)])
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 107 |     ) as Partial<{ [K in ScheduleCExpenseTypeName]: number }>,
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 108 |     otherExpenses: formData.otherExpenses.map(e => ({
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 109 |       ...e,
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 110 |       amount: Number(e.amount)
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 111 |     }))
+[dev]         | ^^^^^^^^^^^^^^^^
+[dev]   > 112 |   }
+[dev]         | ^^^^
+[dev]     113 | }
+[dev]     114 |
+[dev]     115 | export default function ScheduleCPage(): ReactElement {
+[dev]
+[dev] ERROR in src/components/income/ScheduleC.tsx:189:11
+[dev] TS2322: Type '{ autofocus: false; prefix: string; checkboxText: string; allowForeignCountry: false; }' is not assignable to type 'IntrinsicAttributes & AddressProps'.
+[dev]   Property 'prefix' does not exist on type 'IntrinsicAttributes & AddressProps'.
+[dev]     187 |         <AddressFields
+[dev]     188 |           autofocus={false}
+[dev]   > 189 |           prefix="businessAddress"
+[dev]         |           ^^^^^^
+[dev]     190 |           checkboxText="Does the business have a foreign address?"
+[dev]     191 |           allowForeignCountry={false}
+[dev]     192 |         />
+[dev]
+[dev] ERROR in src/components/income/ScheduleC.tsx:195:10
+[dev] TS2739: Type '{ dropDownData: string[]; label: string; name: "accountingMethod"; }' is missing the following properties from type 'LabeledDropdownProps<string, { accountingMethod: any; } & { accountingMethod: any; } & { accountingMethod: any; } & { accountingMethod: any; }>': valueMapping, keyMapping, textMapping
+[dev]     193 |         <LabeledInput name="businessCode" label="Business code" />
+[dev]     194 |         <LabeledInput name="ein" label="Employer ID Number (EIN)" />
+[dev]   > 195 |         <GenericLabeledDropdown
+[dev]         |          ^^^^^^^^^^^^^^^^^^^^^^
+[dev]     196 |           dropDownData={['Cash', 'Accrual', 'Other']}
+[dev]     197 |           label="Accounting Method"
+[dev]     198 |           name="accountingMethod"
+[dev]
+[dev] ERROR in src/forms/Y2021/tests/f6251.test.ts:9:7
+[dev] TS2741: Property 'scheduleCs' is missing in type '{ f1099s: never[]; f3921s: { name: string; personRole: PersonRole.PRIMARY; exercisePricePerShare: number; fmv: number; numShares: number; }[]; credits: never[]; scheduleK1Form1065s: never[]; itemizedDeductions: undefined; ... 8 more ...; individualRetirementArrangements: never[]; }' but required in type 'ValidatedInformation'.
+[dev]      7 | import { ValidatedInformation } from 'ustaxes/forms/F1040Base'
+[dev]      8 |
+[dev]   >  9 | const baseInformation: ValidatedInformation = {
+[dev]        |       ^^^^^^^^^^^^^^^
+[dev]     10 |   f1099s: [],
+[dev]     11 |   f3921s: [
+[dev]     12 |     {
+[dev]
+[dev] ERROR in src/forms/Y2021/tests/ScheduleC.test.ts:36:13
+[dev] TS2322: Type '"S"' is not assignable to type 'FilingStatus | undefined'.
+[dev]     34 |         taxPayer: {
+[dev]     35 |             ...blankState.taxPayer,
+[dev]   > 36 |             filingStatus: 'S',
+[dev]        |             ^^^^^^^^^^^^
+[dev]     37 |             primaryPerson: {
+[dev]     38 |                 firstName: 'Test',
+[dev]     39 |                 lastName: 'User',
+[dev]
+[dev] ERROR in src/forms/Y2022/tests/f6251.test.ts:10:7
+[dev] TS2741: Property 'scheduleCs' is missing in type '{ f1099s: never[]; f3921s: { name: string; personRole: PersonRole.PRIMARY; exercisePricePerShare: number; fmv: number; numShares: number; }[]; credits: never[]; scheduleK1Form1065s: never[]; itemizedDeductions: undefined; ... 8 more ...; individualRetirementArrangements: never[]; }' but required in type 'ValidatedInformation'.
+[dev]      8 | import federalBrackets, { amt } from '../data/federal'
+[dev]      9 |
+[dev]   > 10 | const baseInformation: ValidatedInformation = {
+[dev]        |       ^^^^^^^^^^^^^^^
+[dev]     11 |   f1099s: [],
+[dev]     12 |   f3921s: [
+[dev]     13 |     {
+[dev]
+[dev] ERROR in src/forms/Y2023/tests/f6251.test.ts:10:7
+[dev] TS2741: Property 'scheduleCs' is missing in type '{ f1099s: never[]; f3921s: { name: string; personRole: PersonRole.PRIMARY; exercisePricePerShare: number; fmv: number; numShares: number; }[]; credits: never[]; scheduleK1Form1065s: never[]; itemizedDeductions: undefined; ... 8 more ...; individualRetirementArrangements: never[]; }' but required in type 'ValidatedInformation'.
+[dev]      8 | import federalBrackets, { amt } from '../data/federal'
+[dev]      9 |
+[dev]   > 10 | const baseInformation: ValidatedInformation = {
+[dev]        |       ^^^^^^^^^^^^^^^
+[dev]     11 |   f1099s: [],
+[dev]     12 |   f3921s: [
+[dev]     13 |     {
+[dev]
+[dev] ERROR in src/forms/Y2024/tests/f6251.test.ts:10:7
+[dev] TS2741: Property 'scheduleCs' is missing in type '{ f1099s: never[]; f3921s: { name: string; personRole: PersonRole.PRIMARY; exercisePricePerShare: number; fmv: number; numShares: number; }[]; credits: never[]; scheduleK1Form1065s: never[]; itemizedDeductions: undefined; ... 8 more ...; individualRetirementArrangements: never[]; }' but required in type 'ValidatedInformation'.
+[dev]      8 | import federalBrackets, { amt } from '../data/federal'
+[dev]      9 |
+[dev]   > 10 | const baseInformation: ValidatedInformation = {
+[dev]        |       ^^^^^^^^^^^^^^^
+[dev]     11 |   f1099s: [],
+[dev]     12 |   f3921s: [
+[dev]     13 |     {
+[dev]
+[dev] ERROR in src/redux/store.ts:163:54
+[dev] TS2769: No overload matches this call.
+[dev]   Overload 1 of 7, '(middleware1: Middleware<Dispatch<never>, any, any>): StoreEnhancer<{ dispatch: Dispatch<never>; }, {}>', gave the following error.
+[dev]     Argument of type 'Middleware<{}, any, Dispatch<UnknownAction>>' is not assignable to parameter of type 'Middleware<Dispatch<never>, any, any>'.
+[dev]       Type '(next: (action: unknown) => unknown) => (action: unknown) => unknown' is not assignable to type '(next: Dispatch<AnyAction>) => (action: any) => any'.
+[dev]         Types of parameters 'next' and 'next' are incompatible.
+[dev]           Types of parameters 'action' and 'action' are incompatible.
+[dev]             Type 'unknown' is not assignable to type 'AnyAction'.
+[dev]   Overload 2 of 7, '(...middlewares: Middleware<any, any, any>[]): StoreEnhancer<{ dispatch: Dispatch<never>; }, {}>', gave the following error.
+[dev]     Argument of type 'Middleware<{}, any, Dispatch<UnknownAction>>' is not assignable to parameter of type 'Middleware<any, any, any>'.
+[dev]       Type '(next: (action: unknown) => unknown) => (action: unknown) => unknown' is not assignable to type '(next: Dispatch<AnyAction>) => (action: any) => any'.
+[dev]     161 |
+[dev]     162 | export const createStore = (): PersistedStore =>
+[dev]   > 163 |   reduxCreateStore(persistedReducer, applyMiddleware(logger))
+[dev]         |                                                      ^^^^^^
+[dev]     164 |
+[dev]     165 | export const store = createStore()
+[dev]     166 |
+[dev]
+[dev] Compiling...
+[dev] Failed to compile.
+[dev]
+[dev] Module not found: Error: Can't resolve 'styled-components' in '/app/node_modules/react-data-table-component/dist'
+[dev] WARNING in [eslint]
+[dev] src/components/income/ScheduleC.tsx
+[dev]   Line 2:10:    'Message' is defined but never used          @typescript-eslint/no-unused-vars
+[dev]   Line 5:10:    'useSelector' is defined but never used      @typescript-eslint/no-unused-vars
+[dev]   Line 20:3:    'TaxYear' is defined but never used          @typescript-eslint/no-unused-vars
+[dev]   Line 22:10:   'YearsTaxesState' is defined but never used  @typescript-eslint/no-unused-vars
+[dev]   Line 119:34:  'watch' is assigned a value but never used   @typescript-eslint/no-unused-vars
+[dev]
+[dev] src/forms/Y2021/irsForms/F8995.ts
+[dev]   Line 51:23:  Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined  @typescript-eslint/no-unnecessary-condition
+[dev]
+[dev] src/forms/Y2021/irsForms/ScheduleC.ts
+[dev]   Line 187:11:  Unnecessary conditional, value is always truthy  @typescript-eslint/no-unnecessary-condition
+[dev]
+[dev] src/redux/reducer.ts
+[dev]   Line 419:26:  Unnecessary conditional, value is always truthy  @typescript-eslint/no-unnecessary-condition
+[dev]   Line 423:34:  Unnecessary conditional, value is always truthy  @typescript-eslint/no-unnecessary-condition
+[dev]   Line 431:34:  Unnecessary conditional, value is always truthy  @typescript-eslint/no-unnecessary-condition
+[dev]
+[dev] ERROR in ./node_modules/react-data-table-component/dist/index.cjs.js 7:6-34
+[dev] Module not found: Error: Can't resolve 'styled-components' in '/app/node_modules/react-data-table-component/dist'
+[dev]
+[dev] ERROR in [eslint]
+[dev] src/forms/Y2021/irsForms/ScheduleC.ts
+[dev]   Line 18:50:  Type number trivially inferred from a number literal, remove type annotation  @typescript-eslint/no-inferrable-types
+[dev]
+[dev] Search for the keywords to learn more about each error.
+[dev]
+[dev] webpack compiled with 2 errors and 1 warning
+[dev] ERROR in src/forms/Y2021/tests/f6251.test.ts:9:7
+[dev] TS2741: Property 'scheduleCs' is missing in type '{ f1099s: never[]; f3921s: { name: string; personRole: PersonRole.PRIMARY; exercisePricePerShare: number; fmv: number; numShares: number; }[]; credits: never[]; scheduleK1Form1065s: never[]; itemizedDeductions: undefined; ... 8 more ...; individualRetirementArrangements: never[]; }' but required in type 'ValidatedInformation'.
+[dev]      7 | import { ValidatedInformation } from 'ustaxes/forms/F1040Base'
+[dev]      8 |
+[dev]   >  9 | const baseInformation: ValidatedInformation = {
+[dev]        |       ^^^^^^^^^^^^^^^
+[dev]     10 |   f1099s: [],
+[dev]     11 |   f3921s: [
+[dev]     12 |     {
+[dev]
+[dev] ERROR in src/forms/Y2021/tests/ScheduleC.test.ts:36:13
+[dev] TS2322: Type '"S"' is not assignable to type 'FilingStatus | undefined'.
+[dev]     34 |         taxPayer: {
+[dev]     35 |             ...blankState.taxPayer,
+[dev]   > 36 |             filingStatus: 'S',
+[dev]        |             ^^^^^^^^^^^^
+[dev]     37 |             primaryPerson: {
+[dev]     38 |                 firstName: 'Test',
+[dev]     39 |                 lastName: 'User',
+[dev]
+[dev] ERROR in src/forms/Y2022/tests/f6251.test.ts:10:7
+[dev] TS2741: Property 'scheduleCs' is missing in type '{ f1099s: never[]; f3921s: { name: string; personRole: PersonRole.PRIMARY; exercisePricePerShare: number; fmv: number; numShares: number; }[]; credits: never[]; scheduleK1Form1065s: never[]; itemizedDeductions: undefined; ... 8 more ...; individualRetirementArrangements: never[]; }' but required in type 'ValidatedInformation'.
+[dev]      8 | import federalBrackets, { amt } from '../data/federal'
+[dev]      9 |
+[dev]   > 10 | const baseInformation: ValidatedInformation = {
+[dev]        |       ^^^^^^^^^^^^^^^
+[dev]     11 |   f1099s: [],
+[dev]     12 |   f3921s: [
+[dev]     13 |     {
+[dev]
+[dev] ERROR in src/forms/Y2023/tests/f6251.test.ts:10:7
+[dev] TS2741: Property 'scheduleCs' is missing in type '{ f1099s: never[]; f3921s: { name: string; personRole: PersonRole.PRIMARY; exercisePricePerShare: number; fmv: number; numShares: number; }[]; credits: never[]; scheduleK1Form1065s: never[]; itemizedDeductions: undefined; ... 8 more ...; individualRetirementArrangements: never[]; }' but required in type 'ValidatedInformation'.
+[dev]      8 | import federalBrackets, { amt } from '../data/federal'
+[dev]      9 |
+[dev]   > 10 | const baseInformation: ValidatedInformation = {
+[dev]        |       ^^^^^^^^^^^^^^^
+[dev]     11 |   f1099s: [],
+[dev]     12 |   f3921s: [
+[dev]     13 |     {
+[dev]
+[dev] ERROR in src/forms/Y2024/tests/f6251.test.ts:10:7
+[dev] TS2741: Property 'scheduleCs' is missing in type '{ f1099s: never[]; f3921s: { name: string; personRole: PersonRole.PRIMARY; exercisePricePerShare: number; fmv: number; numShares: number; }[]; credits: never[]; scheduleK1Form1065s: never[]; itemizedDeductions: undefined; ... 8 more ...; individualRetirementArrangements: never[]; }' but required in type 'ValidatedInformation'.
+[dev]      8 | import federalBrackets, { amt } from '../data/federal'
+[dev]      9 |
+[dev]   > 10 | const baseInformation: ValidatedInformation = {
+[dev]        |       ^^^^^^^^^^^^^^^
+[dev]     11 |   f1099s: [],
+[dev]     12 |   f3921s: [
+[dev]     13 |     {
+[dev]
+[dev] ERROR in src/redux/store.ts:163:54
+[dev] TS2769: No overload matches this call.
+[dev]   Overload 1 of 7, '(middleware1: Middleware<Dispatch<never>, any, any>): StoreEnhancer<{ dispatch: Dispatch<never>; }, {}>', gave the following error.
+[dev]     Argument of type 'Middleware<{}, any, Dispatch<UnknownAction>>' is not assignable to parameter of type 'Middleware<Dispatch<never>, any, any>'.
+[dev]       Type '(next: (action: unknown) => unknown) => (action: unknown) => unknown' is not assignable to type '(next: Dispatch<AnyAction>) => (action: any) => any'.
+[dev]         Types of parameters 'next' and 'next' are incompatible.
+[dev]           Types of parameters 'action' and 'action' are incompatible.
+[dev]             Type 'unknown' is not assignable to type 'AnyAction'.
+[dev]   Overload 2 of 7, '(...middlewares: Middleware<any, any, any>[]): StoreEnhancer<{ dispatch: Dispatch<never>; }, {}>', gave the following error.
+[dev]     Argument of type 'Middleware<{}, any, Dispatch<UnknownAction>>' is not assignable to parameter of type 'Middleware<any, any, any>'.
+[dev]       Type '(next: (action: unknown) => unknown) => (action: unknown) => unknown' is not assignable to type '(next: Dispatch<AnyAction>) => (action: any) => any'.
+[dev]     161 |
+[dev]     162 | export const createStore = (): PersistedStore =>
+[dev]   > 163 |   reduxCreateStore(persistedReducer, applyMiddleware(logger))
+[dev]         |                                                      ^^^^^^
+[dev]     164 |
+[dev]     165 | export const store = createStore()
+[dev]     166 |
+[dev]

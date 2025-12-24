@@ -413,6 +413,28 @@ const formReducer = (
         credits: newCredits
       }
     }
+    case ActionName.ADD_SCHEDULE_C: {
+      return {
+        ...newState,
+        scheduleCs: [...(newState.scheduleCs || []), action.formData]
+      }
+    }
+    case ActionName.EDIT_SCHEDULE_C: {
+      const newScheduleCs = [...(newState.scheduleCs || [])]
+      newScheduleCs.splice(action.formData.index, 1, action.formData.value)
+      return {
+        ...newState,
+        scheduleCs: newScheduleCs
+      }
+    }
+    case ActionName.REMOVE_SCHEDULE_C: {
+      const newScheduleCs = [...(newState.scheduleCs || [])]
+      newScheduleCs.splice(action.formData, 1)
+      return {
+        ...newState,
+        scheduleCs: newScheduleCs
+      }
+    }
 
     default: {
       return newState

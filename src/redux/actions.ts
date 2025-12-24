@@ -37,7 +37,9 @@ import {
   EditIraAction,
   EditAssetAction,
   EditF3921Action,
-  EditScheduleK1Form1065Action
+  EditScheduleK1Form1065Action,
+  EditScheduleCAction,
+  ScheduleC
 } from 'ustaxes/core/data'
 import * as validators from 'ustaxes/core/data/validate'
 import { index as indexValidator } from 'ustaxes/core/data/validate'
@@ -94,7 +96,10 @@ export enum ActionName {
   REMOVE_SCHEDULE_K1_F1065 = 'SCHEDULE_K1_F1065/REMOVE',
   ADD_CREDIT = 'CREDIT/ADD',
   EDIT_CREDIT = 'CREDIT/EDIT',
-  REMOVE_CREDIT = 'CREDIT/REMOVE'
+  REMOVE_CREDIT = 'CREDIT/REMOVE',
+  ADD_SCHEDULE_C = 'SCHEDULE_C/ADD',
+  EDIT_SCHEDULE_C = 'SCHEDULE_C/EDIT',
+  REMOVE_SCHEDULE_C = 'SCHEDULE_C/REMOVE'
 }
 
 interface Save<T, R> {
@@ -179,6 +184,9 @@ type RemoveScheduleK1Form1065 = Save<
 type AddCredit = Save<typeof ActionName.ADD_CREDIT, Credit>
 type EditCredit = Save<typeof ActionName.EDIT_CREDIT, EditCreditAction>
 type RemoveCredit = Save<typeof ActionName.REMOVE_CREDIT, number>
+type AddScheduleC = Save<typeof ActionName.ADD_SCHEDULE_C, ScheduleC>
+type EditScheduleC = Save<typeof ActionName.EDIT_SCHEDULE_C, EditScheduleCAction>
+type RemoveScheduleC = Save<typeof ActionName.REMOVE_SCHEDULE_C, number>
 
 export type Actions =
   | SaveRefundInfo
@@ -230,6 +238,9 @@ export type Actions =
   | AddCredit
   | EditCredit
   | RemoveCredit
+  | AddScheduleC
+  | EditScheduleC
+  | RemoveScheduleC
 
 export type SignalAction = (year: TaxYear) => Actions
 export type ActionCreator<A> = (formData: A) => SignalAction
@@ -521,5 +532,17 @@ export const editCredit: ActionCreator<EditCreditAction> = makeActionCreator(
 
 export const removeCredit: ActionCreator<number> = makeActionCreator(
   ActionName.REMOVE_CREDIT,
+  indexValidator
+)
+
+export const addScheduleC: ActionCreator<ScheduleC> = makeActionCreator(
+  ActionName.ADD_SCHEDULE_C
+)
+
+export const editScheduleC: ActionCreator<EditScheduleCAction> =
+  makeActionCreator(ActionName.EDIT_SCHEDULE_C, validators.editScheduleCAction)
+
+export const removeScheduleC: ActionCreator<number> = makeActionCreator(
+  ActionName.REMOVE_SCHEDULE_C,
   indexValidator
 )
