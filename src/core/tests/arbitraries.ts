@@ -535,7 +535,7 @@ const scheduleC: Arbitrary<types.ScheduleC> = fc.tuple(
   address,
   numStr(6),
   ein,
-  fc.constantFrom<'Cash', 'Accrual', 'Other'>('Cash', 'Accrual', 'Other'),
+  fc.constantFrom<'Cash' | 'Accrual' | 'Other'>('Cash', 'Accrual', 'Other'),
   fc.oneof(word, fc.constant(undefined)),
   fc.boolean(),
   fc.boolean(),
