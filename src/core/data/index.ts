@@ -587,6 +587,50 @@ export enum ScheduleCExpenseType {
 
 export type ScheduleCExpenseTypeName = keyof typeof ScheduleCExpenseType
 
+// --- New Modules (The Contract) ---
+
+export interface VehicleExpense {
+  makeModel?: string;
+  datePlacedInService?: string;
+  totalMiles?: number;
+  businessMiles?: number;
+  commutingMiles?: number;
+  otherMiles?: number;
+  availableForPersonalUse?: boolean;
+  spouseAvailable?: boolean;
+  evidenceSupported?: boolean;
+  evidenceWritten?: boolean;
+}
+
+export interface CostOfGoods {
+  method?: 'cost' | 'lowerOfCostOrMarket' | 'other';
+  openingInventory?: number;
+  purchases?: number;
+  costOfLabor?: number;
+  materialsAndSupplies?: number;
+  otherCosts?: number;
+  closingInventory?: number;
+}
+
+export interface HomeOffice {
+  address?: string;
+  areaUsed?: number;
+  totalArea?: number;
+  method?: 'simplified' | 'actual';
+  simplifiedRate?: boolean; // True if using $5/sqft method
+  grossIncome?: number; // Usually derived, but helpful for form logic
+  expenses?: {
+    mortgageInterest?: number;
+    realEstateTaxes?: number;
+    insurance?: number;
+    rent?: number;
+    repairsAndMaintenance?: number;
+    utilities?: number;
+    other?: number;
+    carryoverPriorYear?: number;
+  }
+}
+
 export interface ScheduleC {
   personRole: PersonRole.PRIMARY | PersonRole.SPOUSE
   businessName?: string
@@ -603,6 +647,11 @@ export interface ScheduleC {
   otherIncome: number
   expenses: Partial<{ [K in ScheduleCExpenseTypeName]: number }>
   otherExpenses: { description: string; amount: number }[]
+
+  // --- New Modules (The Contract) ---
+  costOfGoods?: CostOfGoods;
+  vehicleExpenses?: VehicleExpense[];
+  homeOffice?: HomeOffice;
 }
 
 export interface Information<D = Date> {

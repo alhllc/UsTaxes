@@ -430,7 +430,144 @@ export const questions: Arbitrary<Responses> = fc
       .map((kvs) => Object.fromEntries(kvs) as Responses)
   )
 
-// const iraPlan: Arbitrary<IraPlanName> = fc.constantFrom(...iraPlanNames)
+// Arbitraries for new Schedule C modules
+
+const vehicleExpense: Arbitrary<types.VehicleExpense> = fc.tuple(
+  words,
+  fc.date().map(d => d.toISOString()),
+  fc.nat({max: 100000}),
+  fc.nat({max: 50000}),
+  fc.nat({max: 10000}),
+  fc.nat({max: 10000}),
+  fc.boolean(),
+  fc.boolean(),
+  fc.boolean(),
+  fc.boolean()
+).map(([makeModel, datePlacedInService, totalMiles, businessMiles, commutingMiles, otherMiles, availableForPersonalUse, spouseAvailable, evidenceSupported, evidenceWritten]) => ({
+  makeModel,
+  datePlacedInService,
+  totalMiles,
+  businessMiles,
+  commutingMiles,
+  otherMiles,
+  availableForPersonalUse,
+  spouseAvailable,
+  evidenceSupported,
+  evidenceWritten
+}))
+
+const costOfGoods: Arbitrary<types.CostOfGoods> = fc.tuple(
+  fc.constantFrom<'cost' | 'lowerOfCostOrMarket' | 'other'>('cost', 'lowerOfCostOrMarket', 'other'),
+  posCurrency(50000),
+  posCurrency(50000),
+  posCurrency(50000),
+  posCurrency(10000),
+  posCurrency(10000),
+  posCurrency(50000)
+).map(([method, openingInventory, purchases, costOfLabor, materialsAndSupplies, otherCosts, closingInventory]) => ({
+  method,
+  openingInventory,
+  purchases,
+  costOfLabor,
+  materialsAndSupplies,
+  otherCosts,
+  closingInventory
+}))
+
+const homeOfficeExpenses = fc.tuple(
+  posCurrency(10000),
+  posCurrency(10000),
+  posCurrency(5000),
+  posCurrency(20000),
+  posCurrency(5000),
+  posCurrency(5000),
+  posCurrency(2000),
+  posCurrency(1000)
+).map(([mortgageInterest, realEstateTaxes, insurance, rent, repairsAndMaintenance, utilities, other, carryoverPriorYear]) => ({
+  mortgageInterest,
+  realEstateTaxes,
+  insurance,
+  rent,
+  repairsAndMaintenance,
+  utilities,
+  other,
+  carryoverPriorYear
+}))
+
+const homeOffice: Arbitrary<types.HomeOffice> = fc.tuple(
+  words,
+  fc.nat({max: 500}),
+  fc.nat({max: 3000}),
+  fc.constantFrom<'simplified' | 'actual'>('simplified', 'actual'),
+  fc.boolean(),
+  posCurrency(100000),
+  homeOfficeExpenses
+).map(([address, areaUsed, totalArea, method, simplifiedRate, grossIncome, expenses]) => ({
+  address,
+  areaUsed,
+  totalArea,
+  method,
+  simplifiedRate,
+  grossIncome,
+  expenses
+}))
+
+// Existing Schedule C arbitraries
+const schedCExpenseTypeName: Arbitrary<types.ScheduleCExpenseTypeName> =
+  fc.constantFrom(...util.enumKeys(types.ScheduleCExpenseType))
+
+const schedCExpenses: Arbitrary<
+  Partial<{ [K in types.ScheduleCExpenseTypeName]: number }>
+> = fc.set(schedCExpenseTypeName).chain((es) =>
+  fc
+    .array(expense, { minLength: es.length, maxLength: es.length })
+    .map((nums) =>
+      _.chain(es)
+        .zipWith(nums, (e, num) => [e, num])
+        .fromPairs()
+        .value()
+    )
+)
+
+const scheduleC: Arbitrary<types.ScheduleC> = fc.tuple(
+  fc.constantFrom(types.PersonRole.PRIMARY, types.PersonRole.SPOUSE),
+  maxWords(3),
+  address,
+  numStr(6),
+  ein,
+  fc.constantFrom<'Cash', 'Accrual', 'Other'>('Cash', 'Accrual', 'Other'),
+  fc.oneof(word, fc.constant(undefined)),
+  fc.boolean(),
+  fc.boolean(),
+  posCurrency(200000),
+  posCurrency(5000),
+  posCurrency(50000),
+  posCurrency(10000),
+  schedCExpenses,
+  fc.array(fc.tuple(words, posCurrency(1000)).map(([d, a]) => ({description: d, amount: a}))),
+  fc.option(costOfGoods),
+  fc.option(fc.array(vehicleExpense)),
+  fc.option(homeOffice)
+).map(([personRole, businessName, businessAddress, businessCode, ein, accountingMethod, accountingMethodOther, materiallyParticipate, startedCurrentYear, grossReceipts, returnsAndAllowances, costOfGoodsSold, otherIncome, expenses, otherExpenses, costOfGoods, vehicleExpenses, homeOffice]) => ({
+  personRole,
+  businessName,
+  businessAddress,
+  businessCode,
+  ein,
+  accountingMethod,
+  accountingMethodOther,
+  materiallyParticipate,
+  startedCurrentYear,
+  grossReceipts,
+  returnsAndAllowances,
+  costOfGoodsSold,
+  otherIncome,
+  expenses,
+  otherExpenses,
+  costOfGoods: costOfGoods || undefined,
+  vehicleExpenses: vehicleExpenses || undefined,
+  homeOffice: homeOffice || undefined
+}))
 
 export class Arbitraries {
   currentYear: number
@@ -670,7 +807,8 @@ export class Arbitraries {
         state,
         fc.array(this.healthSavingsAccount()),
         fc.array(this.credit(), { maxLength: 2 }),
-        fc.array(this.ira())
+        fc.array(this.ira()),
+        fc.array(scheduleC, { maxLength: 2 }) // Added scheduleC generation
       )
       .map(
         ([
@@ -688,7 +826,8 @@ export class Arbitraries {
           state,
           healthSavingsAccounts,
           credits,
-          individualRetirementArrangements
+          individualRetirementArrangements,
+          scheduleCs
         ]) => ({
           f1099s,
           w2s,
@@ -705,7 +844,7 @@ export class Arbitraries {
           healthSavingsAccounts,
           credits,
           individualRetirementArrangements,
-          scheduleCs: []
+          scheduleCs
         })
       )
 }
