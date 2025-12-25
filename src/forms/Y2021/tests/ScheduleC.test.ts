@@ -184,4 +184,164 @@ describe('ScheduleC', () => {
       // L2 is Net Profit from Sch C
       expect(se.l2()).toBe(9200)
   })
+
+  it('should calculate vehicle deduction from miles (56 cents/mile for 2021)', () => {
+      const dataWithVehicle: ScheduleCData = {
+          ...defaultScheduleC,
+          vehicleExpenses: [
+              {
+                  makeModel: 'Tesla Model Y',
+                  businessMiles: 1000,
+                  commutingMiles: 500,
+                  otherMiles: 200,
+                  datePlacedInService: '2021-01-01'
+              }
+          ]
+      }
+      const f1040 = getF1040({
+          scheduleCs: [dataWithVehicle]
+      })
+      const sc = f1040.scheduleC!
+
+      // 1000 miles * 0.56 = 560
+      expect(sc.l9()).toBe(560)
+  })
+
+  it('should prefer vehicle calculation over manual entry', () => {
+      const dataWithVehicle: ScheduleCData = {
+          ...defaultScheduleC,
+          expenses: {
+              ...defaultScheduleC.expenses,
+              carAndTruck: 9999 // Should be ignored
+          },
+          vehicleExpenses: [
+              {
+                  businessMiles: 1000
+              }
+          ]
+      }
+      const f1040 = getF1040({
+          scheduleCs: [dataWithVehicle]
+      })
+      const sc = f1040.scheduleC!
+
+      // 1000 miles * 0.56 = 560
+      expect(sc.l9()).toBe(560)
+  })
+
+  it('should calculate detailed COGS', () => {
+      const dataWithCOGS: ScheduleCData = {
+          ...defaultScheduleC,
+          costOfGoods: {
+              method: 'cost',
+              openingInventory: 5000,
+              purchases: 10000,
+              costOfLabor: 2000,
+              materialsAndSupplies: 500,
+              otherCosts: 100,
+              closingInventory: 3000
+          },
+          costOfGoodsSold: 0 // Should be ignored
+      }
+      const f1040 = getF1040({
+          scheduleCs: [dataWithCOGS]
+      })
+      const sc = f1040.scheduleC!
+
+      // L35 Opening: 5000
+      expect(sc.l35()).toBe(5000)
+      // L36 Purchases: 10000
+      expect(sc.l36()).toBe(10000)
+      // L37 Labor: 2000
+      expect(sc.l37()).toBe(2000)
+      // L38 Materials: 500
+      expect(sc.l38()).toBe(500)
+      // L39 Other: 100
+      expect(sc.l39()).toBe(100)
+
+      // L40 (Total available): 5000 + 10000 + 2000 + 500 + 100 = 17600
+      expect(sc.l40()).toBe(17600)
+
+      // L41 Closing: 3000
+      expect(sc.l41()).toBe(3000)
+
+      // L42 COGS: 17600 - 3000 = 14600
+      expect(sc.l42()).toBe(14600)
+
+      // L4 should also match L42
+      expect(sc.l4()).toBe(14600)
+  })
+
+  it('should calculate Home Office deduction (Simplified Method)', () => {
+      const dataWithHomeOffice: ScheduleCData = {
+          ...defaultScheduleC,
+          // Gross Income: 7500
+          // Total Expenses: 3300
+          // Tentative Profit (L29): 4200
+          homeOffice: {
+              method: 'simplified',
+              areaUsed: 100, // 100 sqft
+              totalArea: 1000
+          }
+      }
+      const f1040 = getF1040({
+          scheduleCs: [dataWithHomeOffice]
+      })
+      const sc = f1040.scheduleC!
+
+      // Deduction: 100 sqft * $5 = 500
+      expect(sc.l30()).toBe(500)
+
+      // Net Profit (L31): 4200 - 500 = 3700
+      expect(sc.l31()).toBe(3700)
+  })
+
+  it('should cap Home Office deduction (Simplified Method) at 300 sqft', () => {
+      const dataWithHomeOffice: ScheduleCData = {
+          ...defaultScheduleC,
+          homeOffice: {
+              method: 'simplified',
+              areaUsed: 500 // > 300
+          }
+      }
+      const f1040 = getF1040({
+          scheduleCs: [dataWithHomeOffice]
+      })
+      const sc = f1040.scheduleC!
+
+      // Deduction: 300 sqft * $5 = 1500
+      expect(sc.l30()).toBe(1500)
+  })
+
+  it('should cap Home Office deduction (Simplified Method) at Line 29', () => {
+      const lowProfitData: ScheduleCData = {
+          ...defaultScheduleC,
+          grossReceipts: 3400,
+          expenses: {
+              wages: 3300
+          },
+          // Gross Income: 3400 (if no other income/returns)
+          // Expenses: 3300
+          // L29: 100
+          homeOffice: {
+              method: 'simplified',
+              areaUsed: 100 // 100 * 5 = 500 tentative
+          },
+          costOfGoodsSold: 0,
+          returnsAndAllowances: 0,
+          otherIncome: 0
+      }
+      const f1040 = getF1040({
+          scheduleCs: [lowProfitData]
+      })
+      const sc = f1040.scheduleC!
+
+      expect(sc.l29()).toBe(100)
+
+      // Deduction limited to 100
+      expect(sc.l30()).toBe(100)
+
+      // L31 should be 0
+      expect(sc.l31()).toBe(0)
+  })
 })

@@ -109,7 +109,16 @@ export default class ScheduleC extends F1040Attachment {
 
   // Part II: Expenses
   l8 = (): number | undefined => this.data.expenses.advertising
-  l9 = (): number | undefined => this.data.expenses.carAndTruck
+  l9 = (): number | undefined => {
+    if (this.data.vehicleExpenses && this.data.vehicleExpenses.length > 0) {
+      return this.data.vehicleExpenses.reduce(
+        (acc, v) => acc + (v.businessMiles ?? 0) * 0.56,
+        0
+      )
+    }
+    return this.data.expenses.carAndTruck
+  }
+
   l10 = (): number | undefined => this.data.expenses.commissions
   l11 = (): number | undefined => this.data.expenses.contractLabor
   l12 = (): number | undefined => this.data.expenses.depletion
@@ -146,7 +155,20 @@ export default class ScheduleC extends F1040Attachment {
       if (l7 === undefined && l28 === undefined) return undefined
       return (l7 ?? 0) - (l28 ?? 0)
   }
-  l30 = (): number | undefined => undefined // Expenses for business use of home. TODO: Form 8829 support
+
+  homeOfficeDeduction = (): number | undefined => {
+    if (this.data.homeOffice?.method === 'simplified') {
+        const area = Math.min(this.data.homeOffice.areaUsed ?? 0, 300)
+        const rate = 5
+        const tentativeDeduction = area * rate
+        const limit = Math.max(0, this.l29() ?? 0)
+        return Math.min(tentativeDeduction, limit)
+    }
+    return undefined // TODO: Form 8829 support
+  }
+
+  l30 = (): number | undefined => this.homeOfficeDeduction()
+
   l31 = (): number | undefined => {
       const l29 = this.l29()
       const l30 = this.l30()
@@ -156,15 +178,34 @@ export default class ScheduleC extends F1040Attachment {
   l32 = (): { select: number } | undefined => undefined // Investment at risk. TODO: Form 6198 support.
 
   // Part III: Cost of Goods Sold
-  l33 = (): { select: number } | undefined => undefined // Method
+  l33 = (): { select: number } | undefined => {
+    switch (this.data.costOfGoods?.method) {
+      case 'cost':
+        return { select: 0 }
+      case 'lowerOfCostOrMarket':
+        return { select: 1 }
+      case 'other':
+        return { select: 2 }
+    }
+    return undefined
+  }
+
   l34 = (): { select: number } | undefined => undefined // Change in quantities
-  l35 = (): number | undefined => undefined // Inventory beginning
-  l36 = (): number | undefined => this.data.costOfGoodsSold // Simplified COGS mapping for now
-  l37 = (): number | undefined => undefined // Cost of labor
-  l38 = (): number | undefined => undefined // Materials and supplies
-  l39 = (): number | undefined => undefined // Other costs
-  l40 = (): number | undefined => sumFields([this.l35(), this.l36(), this.l37(), this.l38(), this.l39()])
-  l41 = (): number | undefined => undefined // Inventory end
+  l35 = (): number | undefined => this.data.costOfGoods?.openingInventory // Inventory beginning
+  l36 = (): number | undefined =>
+    this.data.costOfGoods?.purchases ?? this.data.costOfGoodsSold
+  l37 = (): number | undefined => this.data.costOfGoods?.costOfLabor // Cost of labor
+  l38 = (): number | undefined => this.data.costOfGoods?.materialsAndSupplies // Materials and supplies
+  l39 = (): number | undefined => this.data.costOfGoods?.otherCosts // Other costs
+  l40 = (): number | undefined =>
+    sumFields([
+      this.l35(),
+      this.l36(),
+      this.l37(),
+      this.l38(),
+      this.l39()
+    ])
+  l41 = (): number | undefined => this.data.costOfGoods?.closingInventory // Inventory end
   l42 = (): number | undefined => {
       const l40 = this.l40()
       const l41 = this.l41()
@@ -173,14 +214,35 @@ export default class ScheduleC extends F1040Attachment {
   }
 
   // Part IV: Vehicle Information
-  l43 = (): string | undefined => undefined
-  l44a = (): number | undefined => undefined
-  l44b = (): number | undefined => undefined
-  l44c = (): number | undefined => undefined
-  l45 = (): { select: number } | undefined => undefined
-  l46 = (): { select: number } | undefined => undefined
-  l47a = (): { select: number } | undefined => undefined
-  l47b = (): { select: number } | undefined => undefined
+  vehicle = () => this.data.vehicleExpenses?.[0]
+  l43 = (): string | undefined => this.vehicle()?.datePlacedInService
+  l44a = (): number | undefined => this.vehicle()?.businessMiles
+  l44b = (): number | undefined => this.vehicle()?.commutingMiles
+  l44c = (): number | undefined => this.vehicle()?.otherMiles
+  l45 = (): { select: number } | undefined =>
+    this.vehicle()?.availableForPersonalUse !== undefined
+      ? this.vehicle()?.availableForPersonalUse
+        ? { select: 0 }
+        : { select: 1 }
+      : undefined
+  l46 = (): { select: number } | undefined =>
+    this.vehicle()?.spouseAvailable !== undefined
+      ? this.vehicle()?.spouseAvailable
+        ? { select: 0 }
+        : { select: 1 }
+      : undefined
+  l47a = (): { select: number } | undefined =>
+    this.vehicle()?.evidenceSupported !== undefined
+      ? this.vehicle()?.evidenceSupported
+        ? { select: 0 }
+        : { select: 1 }
+      : undefined
+  l47b = (): { select: number } | undefined =>
+    this.vehicle()?.evidenceWritten !== undefined
+      ? this.vehicle()?.evidenceWritten
+        ? { select: 0 }
+        : { select: 1 }
+      : undefined
 
   // Part V: Other Expenses
   otherExpenses = (): Array<[string, number]> => {
@@ -271,7 +333,8 @@ export default class ScheduleC extends F1040Attachment {
         this.l31(),
 
         // Fields 54-56 are likely unused/blank based on analysis or specific check boxes
-        undefined,
+        // Based on typical PDF order, one of these is likely the Simplified Method checkbox
+        this.data.homeOffice?.method === 'simplified' ? true : undefined,
         undefined,
         undefined,
 
