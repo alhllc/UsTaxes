@@ -15,7 +15,7 @@ export default class ScheduleC extends F1040Attachment {
   data: ScheduleCData
   index: number
 
-  constructor(f1040: F1040, data: ScheduleCData, index: number = 0) {
+  constructor(f1040: F1040, data: ScheduleCData, index = 0) {
     super(f1040)
     this.data = data
     this.index = index

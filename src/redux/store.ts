@@ -160,7 +160,7 @@ export const createStoreUnpersisted = (information: Information): InfoStore =>
   })
 
 export const createStore = (): PersistedStore =>
-  reduxCreateStore(persistedReducer, applyMiddleware(logger))
+  reduxCreateStore(persistedReducer, applyMiddleware(logger as any))
 
 export const store = createStore()
 
