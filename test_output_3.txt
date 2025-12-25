@@ -1,0 +1,370 @@
+npm warn Unknown project config "//.npmrc file". This will stop working in the next major version of npm.
+
+> ustaxes@0.1.23 test
+> ts-node ./scripts/env.ts && ts-node ./scripts/setup.ts && craco test src/forms/Y2024/tests/ScheduleC.test.ts --verbose
+
+Project root path resolved to:  /app
+Override started with arguments:  [
+  '/home/jules/.nvm/versions/node/v22.21.1/bin/node',
+  '/app/node_modules/@craco/craco/dist/scripts/test.js',
+  'src/forms/Y2024/tests/ScheduleC.test.ts',
+  '--verbose'
+]
+For environment:  test
+Config file path resolved to:  /app/craco.config.js
+Applied craco config plugins.
+Found jest config at:  /app/node_modules/react-scripts/scripts/utils/createJestConfig.js
+Overrode require cache for module: /app/node_modules/react-scripts/scripts/utils/createJestConfig.js
+Overrode Jest config provider.
+Overrided Jest config.
+Testing CRA at:  /app/node_modules/react-scripts/scripts/test.js
+Applied Jest config plugins.
+Merged Jest config.
+FAIL src/forms/Y2024/tests/ScheduleC.test.ts (109.666 s)
+  f1040
+    ✓ should be created in (9146 ms)
+    ✓ should arrange attachments according to sequence order (7167 ms)
+    ✓ should create a PDF without failing (63461 ms)
+    ✓ should never have higher AGI than total income (6855 ms)
+    ✓ should never produce higher tax than total income (12989 ms)
+    ✓ should never produce tax on taxable income higher than income (8062 ms)
+  Schedule C
+    ✕ calculates gross profit correctly (1 ms)
+    ✕ calculates expenses and net profit correctly
+
+  ● Schedule C › calculates gross profit correctly
+
+    TypeError: (0 , _f.createDefaultF1040) is not a function
+
+      72 |       ]
+      73 |     }
+    > 74 |     const f1040 = createDefaultF1040(info)
+         |                                     ^
+      75 |     const scheduleC = new ScheduleC(f1040, info.scheduleCs[0])
+      76 |
+      77 |     expect(scheduleC.l1()).toBe(10000)
+
+      at Object.<anonymous> (src/forms/Y2024/tests/ScheduleC.test.ts:74:37)
+
+  ● Schedule C › calculates expenses and net profit correctly
+
+    TypeError: (0 , _f.createDefaultF1040) is not a function
+
+      148 |       ]
+      149 |     }
+    > 150 |     const f1040 = createDefaultF1040(info)
+          |                                     ^
+      151 |     const scheduleC = new ScheduleC(f1040, info.scheduleCs[0])
+      152 |
+      153 |     // Gross Income
+
+      at Object.<anonymous> (src/forms/Y2024/tests/ScheduleC.test.ts:150:37)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 6 passed, 8 total
+Snapshots:   0 total
+Time:        110.505 s, estimated 116 s
+Ran all test suites matching /src\/forms\/Y2024\/tests\/ScheduleC.test.ts/i.
+
+FAIL src/forms/Y2024/tests/ScheduleC.test.ts
+  ● Test suite failed to run
+
+    Jest encountered an unexpected token
+
+    Jest failed to parse a file. This happens e.g. when your code or its dependencies use non-standard JavaScript syntax, or when Jest is not configured to support such syntax.
+
+    Out of the box Jest supports Babel, which will be used to transform your files into valid JS based on your Babel configuration.
+
+    By default "node_modules" folder is ignored by transformers.
+
+    Here's what you can do:
+     • If you are trying to use ECMAScript Modules, see https://jestjs.io/docs/ecmascript-modules for how to enable it.
+     • If you are trying to use TypeScript, see https://jestjs.io/docs/getting-started#using-typescript
+     • To have some of your "node_modules" files transformed, you can specify a custom "transformIgnorePatterns" in your config.
+     • If you need a custom transformation specify a "transform" option in your config.
+     • If you simply want to mock your non-JS modules (e.g. binary assets) you can stub them out with the "moduleNameMapper" config option.
+
+    You'll find more details and examples of these config options in the docs:
+    https://jestjs.io/docs/configuration
+    For information about custom transformations, see:
+    https://jestjs.io/docs/code-transformation
+
+    Details:
+
+    SyntaxError: /app/src/forms/Y2024/tests/ScheduleC.test.ts: Identifier 'F1040' has already been declared. (5:7)
+
+      3 | import ScheduleC from '../irsForms/ScheduleC'
+      4 | import { blankState as blankInformation } from 'ustaxes/redux/reducer'
+    > 5 | import F1040 from '../irsForms/F1040'
+        |        ^
+      6 |
+      7 | const createDefaultF1040 = (info: Information): F1040 => new F1040(info)
+      8 |
+
+      at toParseError (node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at TypeScriptParserMixin.raise (node_modules/@babel/parser/src/tokenizer/index.ts:1507:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (node_modules/@babel/parser/src/util/scope.ts:164:19)
+      at TypeScriptScopeHandler.declareName (node_modules/@babel/parser/src/util/scope.ts:118:12)
+      at TypeScriptScopeHandler.declareName (node_modules/@babel/parser/src/plugins/typescript/scope.ts:89:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (node_modules/@babel/parser/src/parser/lval.ts:852:16)
+      at TypeScriptParserMixin.checkIdentifier (node_modules/@babel/parser/src/parser/lval.ts:847:12)
+      at TypeScriptParserMixin.checkLVal (node_modules/@babel/parser/src/parser/lval.ts:739:12)
+      at TypeScriptParserMixin.finishImportSpecifier (node_modules/@babel/parser/src/parser/statement.ts:3229:10)
+      at TypeScriptParserMixin.parseImportSpecifierLocal (node_modules/@babel/parser/src/parser/statement.ts:3216:31)
+      at TypeScriptParserMixin.maybeParseDefaultImportSpecifier (node_modules/@babel/parser/src/parser/statement.ts:3401:12)
+      at TypeScriptParserMixin.parseImportSpecifiersAndAfter (node_modules/@babel/parser/src/parser/statement.ts:3163:29)
+      at TypeScriptParserMixin.parseImport (node_modules/@babel/parser/src/parser/statement.ts:3148:17)
+      at TypeScriptParserMixin.parseImport (node_modules/@babel/parser/src/plugins/typescript/index.ts:2973:28)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:647:25)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseModuleItem (node_modules/@babel/parser/src/parser/statement.ts:419:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1443:16)
+      at TypeScriptParserMixin.parseBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+      at TypeScriptParserMixin.parseProgram (node_modules/@babel/parser/src/parser/statement.ts:229:10)
+      at TypeScriptParserMixin.parseTopLevel (node_modules/@babel/parser/src/parser/statement.ts:203:25)
+      at TypeScriptParserMixin.parse (node_modules/@babel/parser/src/parser/index.ts:88:25)
+      at TypeScriptParserMixin.parse (node_modules/@babel/parser/src/plugins/typescript/index.ts:4337:20)
+      at parse (node_modules/@babel/parser/src/index.ts:86:38)
+      at parser (node_modules/@babel/core/src/parser/index.ts:29:19)
+          at parser.next (<anonymous>)
+      at normalizeFile (node_modules/@babel/core/src/transformation/normalize-file.ts:50:24)
+          at normalizeFile.next (<anonymous>)
+      at run (node_modules/@babel/core/src/transformation/index.ts:41:36)
+          at run.next (<anonymous>)
+      at transform (node_modules/@babel/core/src/transform.ts:29:20)
+          at transform.next (<anonymous>)
+      at evaluateSync (node_modules/gensync/index.js:251:28)
+      at fn (node_modules/gensync/index.js:89:14)
+      at stopHiding - secret - don't use this - v1 (node_modules/@babel/core/src/errors/rewrite-stack-trace.ts:99:14)
+      at transformSync (node_modules/@babel/core/src/transform.ts:66:52)
+      at ScriptTransformer.transformSource (node_modules/@jest/transform/build/ScriptTransformer.js:619:31)
+      at ScriptTransformer._transformAndBuildScript (node_modules/@jest/transform/build/ScriptTransformer.js:765:40)
+      at ScriptTransformer.transform (node_modules/@jest/transform/build/ScriptTransformer.js:822:19)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        2.101 s, estimated 125 s
+Ran all test suites matching /src\/forms\/Y2024\/tests\/ScheduleC.test.ts/i.
+
+FAIL src/forms/Y2024/tests/ScheduleC.test.ts
+  ● Test suite failed to run
+
+    Jest encountered an unexpected token
+
+    Jest failed to parse a file. This happens e.g. when your code or its dependencies use non-standard JavaScript syntax, or when Jest is not configured to support such syntax.
+
+    Out of the box Jest supports Babel, which will be used to transform your files into valid JS based on your Babel configuration.
+
+    By default "node_modules" folder is ignored by transformers.
+
+    Here's what you can do:
+     • If you are trying to use ECMAScript Modules, see https://jestjs.io/docs/ecmascript-modules for how to enable it.
+     • If you are trying to use TypeScript, see https://jestjs.io/docs/getting-started#using-typescript
+     • To have some of your "node_modules" files transformed, you can specify a custom "transformIgnorePatterns" in your config.
+     • If you need a custom transformation specify a "transform" option in your config.
+     • If you simply want to mock your non-JS modules (e.g. binary assets) you can stub them out with the "moduleNameMapper" config option.
+
+    You'll find more details and examples of these config options in the docs:
+    https://jestjs.io/docs/configuration
+    For information about custom transformations, see:
+    https://jestjs.io/docs/code-transformation
+
+    Details:
+
+    SyntaxError: /app/src/forms/Y2024/tests/ScheduleC.test.ts: Identifier 'F1040' has already been declared. (5:7)
+
+      3 | import ScheduleC from '../irsForms/ScheduleC'
+      4 | import { blankState as blankInformation } from 'ustaxes/redux/reducer'
+    > 5 | import F1040 from '../irsForms/F1040'
+        |        ^
+      6 |
+      7 | const createDefaultF1040 = (info: Information): F1040 => new F1040(info)
+      8 |
+
+      at toParseError (node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at TypeScriptParserMixin.raise (node_modules/@babel/parser/src/tokenizer/index.ts:1507:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (node_modules/@babel/parser/src/util/scope.ts:164:19)
+      at TypeScriptScopeHandler.declareName (node_modules/@babel/parser/src/util/scope.ts:118:12)
+      at TypeScriptScopeHandler.declareName (node_modules/@babel/parser/src/plugins/typescript/scope.ts:89:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (node_modules/@babel/parser/src/parser/lval.ts:852:16)
+      at TypeScriptParserMixin.checkIdentifier (node_modules/@babel/parser/src/parser/lval.ts:847:12)
+      at TypeScriptParserMixin.checkLVal (node_modules/@babel/parser/src/parser/lval.ts:739:12)
+      at TypeScriptParserMixin.finishImportSpecifier (node_modules/@babel/parser/src/parser/statement.ts:3229:10)
+      at TypeScriptParserMixin.parseImportSpecifierLocal (node_modules/@babel/parser/src/parser/statement.ts:3216:31)
+      at TypeScriptParserMixin.maybeParseDefaultImportSpecifier (node_modules/@babel/parser/src/parser/statement.ts:3401:12)
+      at TypeScriptParserMixin.parseImportSpecifiersAndAfter (node_modules/@babel/parser/src/parser/statement.ts:3163:29)
+      at TypeScriptParserMixin.parseImport (node_modules/@babel/parser/src/parser/statement.ts:3148:17)
+      at TypeScriptParserMixin.parseImport (node_modules/@babel/parser/src/plugins/typescript/index.ts:2973:28)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:647:25)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseModuleItem (node_modules/@babel/parser/src/parser/statement.ts:419:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1443:16)
+      at TypeScriptParserMixin.parseBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+      at TypeScriptParserMixin.parseProgram (node_modules/@babel/parser/src/parser/statement.ts:229:10)
+      at TypeScriptParserMixin.parseTopLevel (node_modules/@babel/parser/src/parser/statement.ts:203:25)
+      at TypeScriptParserMixin.parse (node_modules/@babel/parser/src/parser/index.ts:88:25)
+      at TypeScriptParserMixin.parse (node_modules/@babel/parser/src/plugins/typescript/index.ts:4337:20)
+      at parse (node_modules/@babel/parser/src/index.ts:86:38)
+      at parser (node_modules/@babel/core/src/parser/index.ts:29:19)
+          at parser.next (<anonymous>)
+      at normalizeFile (node_modules/@babel/core/src/transformation/normalize-file.ts:50:24)
+          at normalizeFile.next (<anonymous>)
+      at run (node_modules/@babel/core/src/transformation/index.ts:41:36)
+          at run.next (<anonymous>)
+      at transform (node_modules/@babel/core/src/transform.ts:29:20)
+          at transform.next (<anonymous>)
+      at evaluateSync (node_modules/gensync/index.js:251:28)
+      at fn (node_modules/gensync/index.js:89:14)
+      at stopHiding - secret - don't use this - v1 (node_modules/@babel/core/src/errors/rewrite-stack-trace.ts:99:14)
+      at transformSync (node_modules/@babel/core/src/transform.ts:66:52)
+      at ScriptTransformer.transformSource (node_modules/@jest/transform/build/ScriptTransformer.js:619:31)
+      at ScriptTransformer._transformAndBuildScript (node_modules/@jest/transform/build/ScriptTransformer.js:765:40)
+      at ScriptTransformer.transform (node_modules/@jest/transform/build/ScriptTransformer.js:822:19)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        1.876 s
+Ran all test suites matching /src\/forms\/Y2024\/tests\/ScheduleC.test.ts/i.
+
+FAIL src/forms/Y2024/tests/ScheduleC.test.ts
+  ● Test suite failed to run
+
+    Jest encountered an unexpected token
+
+    Jest failed to parse a file. This happens e.g. when your code or its dependencies use non-standard JavaScript syntax, or when Jest is not configured to support such syntax.
+
+    Out of the box Jest supports Babel, which will be used to transform your files into valid JS based on your Babel configuration.
+
+    By default "node_modules" folder is ignored by transformers.
+
+    Here's what you can do:
+     • If you are trying to use ECMAScript Modules, see https://jestjs.io/docs/ecmascript-modules for how to enable it.
+     • If you are trying to use TypeScript, see https://jestjs.io/docs/getting-started#using-typescript
+     • To have some of your "node_modules" files transformed, you can specify a custom "transformIgnorePatterns" in your config.
+     • If you need a custom transformation specify a "transform" option in your config.
+     • If you simply want to mock your non-JS modules (e.g. binary assets) you can stub them out with the "moduleNameMapper" config option.
+
+    You'll find more details and examples of these config options in the docs:
+    https://jestjs.io/docs/configuration
+    For information about custom transformations, see:
+    https://jestjs.io/docs/code-transformation
+
+    Details:
+
+    SyntaxError: /app/src/forms/Y2024/tests/ScheduleC.test.ts: Identifier 'F1040' has already been declared. (5:7)
+
+      3 | import ScheduleC from '../irsForms/ScheduleC'
+      4 | import { blankState as blankInformation } from 'ustaxes/redux/reducer'
+    > 5 | import F1040 from '../irsForms/F1040'
+        |        ^
+      6 |
+      7 | const createDefaultF1040 = (info: Information): F1040 => new F1040(info)
+      8 |
+
+      at toParseError (node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at TypeScriptParserMixin.raise (node_modules/@babel/parser/src/tokenizer/index.ts:1507:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (node_modules/@babel/parser/src/util/scope.ts:164:19)
+      at TypeScriptScopeHandler.declareName (node_modules/@babel/parser/src/util/scope.ts:118:12)
+      at TypeScriptScopeHandler.declareName (node_modules/@babel/parser/src/plugins/typescript/scope.ts:89:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (node_modules/@babel/parser/src/parser/lval.ts:852:16)
+      at TypeScriptParserMixin.checkIdentifier (node_modules/@babel/parser/src/parser/lval.ts:847:12)
+      at TypeScriptParserMixin.checkLVal (node_modules/@babel/parser/src/parser/lval.ts:739:12)
+      at TypeScriptParserMixin.finishImportSpecifier (node_modules/@babel/parser/src/parser/statement.ts:3229:10)
+      at TypeScriptParserMixin.parseImportSpecifierLocal (node_modules/@babel/parser/src/parser/statement.ts:3216:31)
+      at TypeScriptParserMixin.maybeParseDefaultImportSpecifier (node_modules/@babel/parser/src/parser/statement.ts:3401:12)
+      at TypeScriptParserMixin.parseImportSpecifiersAndAfter (node_modules/@babel/parser/src/parser/statement.ts:3163:29)
+      at TypeScriptParserMixin.parseImport (node_modules/@babel/parser/src/parser/statement.ts:3148:17)
+      at TypeScriptParserMixin.parseImport (node_modules/@babel/parser/src/plugins/typescript/index.ts:2973:28)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:647:25)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseModuleItem (node_modules/@babel/parser/src/parser/statement.ts:419:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1443:16)
+      at TypeScriptParserMixin.parseBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+      at TypeScriptParserMixin.parseProgram (node_modules/@babel/parser/src/parser/statement.ts:229:10)
+      at TypeScriptParserMixin.parseTopLevel (node_modules/@babel/parser/src/parser/statement.ts:203:25)
+      at TypeScriptParserMixin.parse (node_modules/@babel/parser/src/parser/index.ts:88:25)
+      at TypeScriptParserMixin.parse (node_modules/@babel/parser/src/plugins/typescript/index.ts:4337:20)
+      at parse (node_modules/@babel/parser/src/index.ts:86:38)
+      at parser (node_modules/@babel/core/src/parser/index.ts:29:19)
+          at parser.next (<anonymous>)
+      at normalizeFile (node_modules/@babel/core/src/transformation/normalize-file.ts:50:24)
+          at normalizeFile.next (<anonymous>)
+      at run (node_modules/@babel/core/src/transformation/index.ts:41:36)
+          at run.next (<anonymous>)
+      at transform (node_modules/@babel/core/src/transform.ts:29:20)
+          at transform.next (<anonymous>)
+      at evaluateSync (node_modules/gensync/index.js:251:28)
+      at fn (node_modules/gensync/index.js:89:14)
+      at stopHiding - secret - don't use this - v1 (node_modules/@babel/core/src/errors/rewrite-stack-trace.ts:99:14)
+      at transformSync (node_modules/@babel/core/src/transform.ts:66:52)
+      at ScriptTransformer.transformSource (node_modules/@jest/transform/build/ScriptTransformer.js:619:31)
+      at ScriptTransformer._transformAndBuildScript (node_modules/@jest/transform/build/ScriptTransformer.js:765:40)
+      at ScriptTransformer.transform (node_modules/@jest/transform/build/ScriptTransformer.js:822:19)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        0.301 s
+Ran all test suites matching /src\/forms\/Y2024\/tests\/ScheduleC.test.ts/i.
+
+PASS src/forms/Y2024/tests/ScheduleC.test.ts
+  Schedule C
+    ✓ calculates gross profit correctly (37 ms)
+    ✓ calculates expenses and net profit correctly (13 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        0.643 s
+Ran all test suites matching /src\/forms\/Y2024\/tests\/ScheduleC.test.ts/i.
+
+PASS src/forms/Y2024/tests/ScheduleC.test.ts
+  Schedule C
+    ✓ calculates gross profit correctly (4 ms)
+    ✓ calculates expenses and net profit correctly (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        0.471 s, estimated 1 s
+Ran all test suites matching /src\/forms\/Y2024\/tests\/ScheduleC.test.ts/i.
+
+PASS src/forms/Y2024/tests/ScheduleC.test.ts
+  Schedule C
+    ✓ calculates gross profit correctly (4 ms)
+    ✓ calculates expenses and net profit correctly (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        1.134 s
+Ran all test suites matching /src\/forms\/Y2024\/tests\/ScheduleC.test.ts/i.
+
+PASS src/forms/Y2024/tests/ScheduleC.test.ts
+  Schedule C
+    ✓ calculates gross profit correctly (19 ms)
+    ✓ calculates expenses and net profit correctly (4 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        2.512 s
+Ran all test suites matching /src\/forms\/Y2024\/tests\/ScheduleC.test.ts/i.
+
+PASS src/forms/Y2024/tests/ScheduleC.test.ts
+  Schedule C
+    ✓ calculates gross profit correctly (5 ms)
+    ✓ calculates expenses and net profit correctly (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        1.521 s
+Ran all test suites matching /src\/forms\/Y2024\/tests\/ScheduleC.test.ts/i.
