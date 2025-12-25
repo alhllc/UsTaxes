@@ -271,4 +271,77 @@ describe('ScheduleC', () => {
       // L4 should also match L42
       expect(sc.l4()).toBe(14600)
   })
+
+  it('should calculate Home Office deduction (Simplified Method)', () => {
+      const dataWithHomeOffice: ScheduleCData = {
+          ...defaultScheduleC,
+          // Gross Income: 7500
+          // Total Expenses: 3300
+          // Tentative Profit (L29): 4200
+          homeOffice: {
+              method: 'simplified',
+              areaUsed: 100, // 100 sqft
+              totalArea: 1000
+          }
+      }
+      const f1040 = getF1040({
+          scheduleCs: [dataWithHomeOffice]
+      })
+      const sc = f1040.scheduleC!
+
+      // Deduction: 100 sqft * $5 = 500
+      expect(sc.l30()).toBe(500)
+
+      // Net Profit (L31): 4200 - 500 = 3700
+      expect(sc.l31()).toBe(3700)
+  })
+
+  it('should cap Home Office deduction (Simplified Method) at 300 sqft', () => {
+      const dataWithHomeOffice: ScheduleCData = {
+          ...defaultScheduleC,
+          homeOffice: {
+              method: 'simplified',
+              areaUsed: 500 // > 300
+          }
+      }
+      const f1040 = getF1040({
+          scheduleCs: [dataWithHomeOffice]
+      })
+      const sc = f1040.scheduleC!
+
+      // Deduction: 300 sqft * $5 = 1500
+      expect(sc.l30()).toBe(1500)
+  })
+
+  it('should cap Home Office deduction (Simplified Method) at Line 29', () => {
+      const lowProfitData: ScheduleCData = {
+          ...defaultScheduleC,
+          grossReceipts: 3400,
+          expenses: {
+              wages: 3300
+          },
+          // Gross Income: 3400 (if no other income/returns)
+          // Expenses: 3300
+          // L29: 100
+          homeOffice: {
+              method: 'simplified',
+              areaUsed: 100 // 100 * 5 = 500 tentative
+          },
+          costOfGoodsSold: 0,
+          returnsAndAllowances: 0,
+          otherIncome: 0
+      }
+      const f1040 = getF1040({
+          scheduleCs: [lowProfitData]
+      })
+      const sc = f1040.scheduleC!
+
+      expect(sc.l29()).toBe(100)
+
+      // Deduction limited to 100
+      expect(sc.l30()).toBe(100)
+
+      // L31 should be 0
+      expect(sc.l31()).toBe(0)
+  })
 })

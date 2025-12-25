@@ -155,7 +155,20 @@ export default class ScheduleC extends F1040Attachment {
       if (l7 === undefined && l28 === undefined) return undefined
       return (l7 ?? 0) - (l28 ?? 0)
   }
-  l30 = (): number | undefined => undefined // Expenses for business use of home. TODO: Form 8829 support
+
+  homeOfficeDeduction = (): number | undefined => {
+    if (this.data.homeOffice?.method === 'simplified') {
+        const area = Math.min(this.data.homeOffice.areaUsed ?? 0, 300)
+        const rate = 5
+        const tentativeDeduction = area * rate
+        const limit = Math.max(0, this.l29() ?? 0)
+        return Math.min(tentativeDeduction, limit)
+    }
+    return undefined // TODO: Form 8829 support
+  }
+
+  l30 = (): number | undefined => this.homeOfficeDeduction()
+
   l31 = (): number | undefined => {
       const l29 = this.l29()
       const l30 = this.l30()
@@ -320,7 +333,8 @@ export default class ScheduleC extends F1040Attachment {
         this.l31(),
 
         // Fields 54-56 are likely unused/blank based on analysis or specific check boxes
-        undefined,
+        // Based on typical PDF order, one of these is likely the Simplified Method checkbox
+        this.data.homeOffice?.method === 'simplified' ? true : undefined,
         undefined,
         undefined,
 
