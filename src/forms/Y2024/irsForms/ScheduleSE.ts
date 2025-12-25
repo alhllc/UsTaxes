@@ -43,7 +43,7 @@ export default class ScheduleSE extends F1040Attachment {
   l1b = (): number => 0
 
   l2 = (): number => {
-    const schCL31 = 0 // TODO: Net profit or (loss) from Schedule C, line 31
+    const schCL31 = this.f1040.scheduleC.l31() // Net profit or (loss) from Schedule C, line 31
     const k1B14 = this.f1040.info.scheduleK1Form1065s.reduce(
       (c, k1) => c + k1.selfEmploymentEarningsA,
       0
