@@ -184,4 +184,91 @@ describe('ScheduleC', () => {
       // L2 is Net Profit from Sch C
       expect(se.l2()).toBe(9200)
   })
+
+  it('should calculate vehicle deduction from miles (56 cents/mile for 2021)', () => {
+      const dataWithVehicle: ScheduleCData = {
+          ...defaultScheduleC,
+          vehicleExpenses: [
+              {
+                  makeModel: 'Tesla Model Y',
+                  businessMiles: 1000,
+                  commutingMiles: 500,
+                  otherMiles: 200,
+                  datePlacedInService: '2021-01-01'
+              }
+          ]
+      }
+      const f1040 = getF1040({
+          scheduleCs: [dataWithVehicle]
+      })
+      const sc = f1040.scheduleC!
+
+      // 1000 miles * 0.56 = 560
+      expect(sc.l9()).toBe(560)
+  })
+
+  it('should prefer vehicle calculation over manual entry', () => {
+      const dataWithVehicle: ScheduleCData = {
+          ...defaultScheduleC,
+          expenses: {
+              ...defaultScheduleC.expenses,
+              carAndTruck: 9999 // Should be ignored
+          },
+          vehicleExpenses: [
+              {
+                  businessMiles: 1000
+              }
+          ]
+      }
+      const f1040 = getF1040({
+          scheduleCs: [dataWithVehicle]
+      })
+      const sc = f1040.scheduleC!
+
+      // 1000 miles * 0.56 = 560
+      expect(sc.l9()).toBe(560)
+  })
+
+  it('should calculate detailed COGS', () => {
+      const dataWithCOGS: ScheduleCData = {
+          ...defaultScheduleC,
+          costOfGoods: {
+              method: 'cost',
+              openingInventory: 5000,
+              purchases: 10000,
+              costOfLabor: 2000,
+              materialsAndSupplies: 500,
+              otherCosts: 100,
+              closingInventory: 3000
+          },
+          costOfGoodsSold: 0 // Should be ignored
+      }
+      const f1040 = getF1040({
+          scheduleCs: [dataWithCOGS]
+      })
+      const sc = f1040.scheduleC!
+
+      // L35 Opening: 5000
+      expect(sc.l35()).toBe(5000)
+      // L36 Purchases: 10000
+      expect(sc.l36()).toBe(10000)
+      // L37 Labor: 2000
+      expect(sc.l37()).toBe(2000)
+      // L38 Materials: 500
+      expect(sc.l38()).toBe(500)
+      // L39 Other: 100
+      expect(sc.l39()).toBe(100)
+
+      // L40 (Total available): 5000 + 10000 + 2000 + 500 + 100 = 17600
+      expect(sc.l40()).toBe(17600)
+
+      // L41 Closing: 3000
+      expect(sc.l41()).toBe(3000)
+
+      // L42 COGS: 17600 - 3000 = 14600
+      expect(sc.l42()).toBe(14600)
+
+      // L4 should also match L42
+      expect(sc.l4()).toBe(14600)
+  })
 })
