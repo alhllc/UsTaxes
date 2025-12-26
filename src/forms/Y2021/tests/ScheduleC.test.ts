@@ -153,6 +153,9 @@ describe('ScheduleC', () => {
           ...defaultScheduleC,
           businessName: 'Second Business',
           grossReceipts: 5000,
+          returnsAndAllowances: 0,
+          costOfGoodsSold: 0,
+          otherIncome: 0,
           expenses: {} // 5000 profit
       }
       // defaultScheduleC profit is 4200
@@ -171,6 +174,9 @@ describe('ScheduleC', () => {
           ...defaultScheduleC,
           businessName: 'Second Business',
           grossReceipts: 5000,
+          returnsAndAllowances: 0,
+          costOfGoodsSold: 0,
+          otherIncome: 0,
           expenses: {} // 5000 profit
       }
       // defaultScheduleC profit is 4200
