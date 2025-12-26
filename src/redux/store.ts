@@ -22,6 +22,7 @@ import { createTransform } from 'redux-persist'
 import { FSAction } from './fs/Actions'
 import { fsReducer } from './fs/FSReducer'
 import { migrateEachYear, migrateAgeAndBlindness } from './migration'
+import { sanityCheckMiddleware } from './sanityCheckMiddleware'
 
 type SerializedState = { [K in TaxYear]: Information } & {
   assets: Asset<string>[]
@@ -160,7 +161,10 @@ export const createStoreUnpersisted = (information: Information): InfoStore =>
   })
 
 export const createStore = (): PersistedStore =>
-  reduxCreateStore(persistedReducer, applyMiddleware(logger as any))
+  reduxCreateStore(
+    persistedReducer,
+    applyMiddleware(sanityCheckMiddleware, logger as any)
+  )
 
 export const store = createStore()
 
