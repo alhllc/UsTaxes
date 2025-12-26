@@ -602,6 +602,16 @@ export interface VehicleExpense {
   evidenceWritten?: boolean;
 }
 
+export interface DepreciableAsset {
+  description: string;
+  datePlacedInService: string;
+  costBasis: number;
+  method: 'MACRS' | 'Other';
+  recoveryPeriod: number; // e.g., 3, 5, 7
+  convention: 'HY' | 'MQ' | 'MM';
+  priorDepreciation?: number;
+}
+
 export interface CostOfGoods {
   method?: 'cost' | 'lowerOfCostOrMarket' | 'other';
   openingInventory?: number;
@@ -619,6 +629,13 @@ export interface HomeOffice {
   method?: 'simplified' | 'actual';
   simplifiedRate?: boolean; // True if using $5/sqft method
   grossIncome?: number; // Usually derived, but helpful for form logic
+
+  // Depreciation of Home fields
+  datePlacedInService?: string;
+  costOfHome?: number;
+  valueOfLand?: number;
+  priorDepreciation?: number;
+
   expenses?: {
     mortgageInterest?: number;
     realEstateTaxes?: number;
@@ -641,6 +658,11 @@ export interface ScheduleC {
   accountingMethodOther?: string
   materiallyParticipate: boolean
   startedCurrentYear: boolean
+
+  statutoryEmployee?: boolean
+  payments1099?: boolean
+  filed1099?: boolean
+
   grossReceipts: number
   returnsAndAllowances: number
   costOfGoodsSold: number
@@ -651,6 +673,7 @@ export interface ScheduleC {
   // --- New Modules (The Contract) ---
   costOfGoods?: CostOfGoods;
   vehicleExpenses?: VehicleExpense[];
+  assets?: DepreciableAsset[];
   homeOffice?: HomeOffice;
 }
 
