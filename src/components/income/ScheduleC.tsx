@@ -39,6 +39,8 @@ import _ from 'lodash'
 import { HomeOfficeInput } from './scheduleC_modules/HomeOfficeInput'
 import { COGSInput } from './scheduleC_modules/COGSInput'
 import { VehicleInput } from './scheduleC_modules/VehicleInput'
+import { DepreciationInput } from './scheduleC_modules/DepreciationInput'
+import { DepreciableAsset } from 'ustaxes/core/data'
 
 // Helper types for the form
 interface ScheduleCForm {
@@ -51,6 +53,9 @@ interface ScheduleCForm {
   accountingMethodOther?: string
   materiallyParticipate: boolean
   startedCurrentYear: boolean
+  statutoryEmployee?: boolean
+  payments1099?: boolean
+  filed1099?: boolean
   grossReceipts: number
   returnsAndAllowances: number
   costOfGoodsSold: number
@@ -59,6 +64,7 @@ interface ScheduleCForm {
   otherExpenses: { description: string; amount: number }[]
   costOfGoods?: CostOfGoods
   vehicleExpenses?: VehicleExpense[]
+  assets?: DepreciableAsset[]
   homeOffice?: HomeOffice
 }
 
@@ -67,6 +73,9 @@ const blankScheduleCForm: ScheduleCForm = {
   accountingMethod: 'Cash',
   materiallyParticipate: true,
   startedCurrentYear: false,
+  statutoryEmployee: false,
+  payments1099: false,
+  filed1099: false,
   grossReceipts: 0,
   returnsAndAllowances: 0,
   costOfGoodsSold: 0,
@@ -75,6 +84,7 @@ const blankScheduleCForm: ScheduleCForm = {
   otherExpenses: [],
   costOfGoods: undefined,
   vehicleExpenses: undefined,
+  assets: undefined,
   homeOffice: undefined
 }
 
@@ -223,6 +233,20 @@ export default function ScheduleCPage(): ReactElement {
           name="startedCurrentYear"
           label="Did you start or acquire this business during the year?"
         />
+        <LabeledCheckbox
+          name="statutoryEmployee"
+          label="Statutory Employee (from W-2 Box 13)?"
+        />
+        <LabeledCheckbox
+          name="payments1099"
+          label="Did you make any payments in 2021 that would require you to file Form(s) 1099?"
+        />
+        {methods.watch('payments1099') && (
+            <LabeledCheckbox
+            name="filed1099"
+            label="If 'Yes', did you or will you file required Forms 1099?"
+            />
+        )}
       </Grid>
 
       <h3>Income</h3>
@@ -257,6 +281,20 @@ export default function ScheduleCPage(): ReactElement {
         control={control}
         render={({ field: { value, onChange } }) => (
           <COGSInput
+            data={value}
+            onChange={onChange}
+          />
+        )}
+      />
+
+      <hr className="my-6" />
+
+      {/* Depreciation Module Injection */}
+      <Controller
+        name="assets"
+        control={control}
+        render={({ field: { value, onChange } }) => (
+          <DepreciationInput
             data={value}
             onChange={onChange}
           />

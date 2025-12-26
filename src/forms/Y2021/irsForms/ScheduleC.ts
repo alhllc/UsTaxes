@@ -4,6 +4,8 @@ import { FormTag } from 'ustaxes/core/irsForms/Form'
 import { sumFields } from 'ustaxes/core/irsForms/util'
 import { ScheduleC as ScheduleCData, PersonRole } from 'ustaxes/core/data'
 import F1040 from './F1040'
+import F4562 from './F4562'
+import F8829 from './F8829'
 
 /**
  * Schedule C: Profit or Loss From Business (Sole Proprietorship)
@@ -79,9 +81,21 @@ export default class ScheduleC extends F1040Attachment {
 
   started2021 = (): boolean | undefined => this.data.startedCurrentYear
 
-  payments1099 = (): { select: number } | undefined => undefined // TODO: Add to data model
-  filed1099 = (): { select: number } | undefined => undefined // TODO: Add to data model
-  statutoryEmployee = (): boolean | undefined => undefined // TODO: Add to data model
+  payments1099 = (): { select: number } | undefined =>
+      this.data.payments1099 !== undefined
+        ? this.data.payments1099
+          ? { select: 0 }
+          : { select: 1 }
+        : undefined
+
+  filed1099 = (): { select: number } | undefined =>
+      this.data.filed1099 !== undefined
+        ? this.data.filed1099
+          ? { select: 0 }
+          : { select: 1 }
+        : undefined
+
+  statutoryEmployee = (): boolean | undefined => this.data.statutoryEmployee
 
   // Part I: Income
   l1 = (): number | undefined => this.data.grossReceipts
@@ -122,7 +136,13 @@ export default class ScheduleC extends F1040Attachment {
   l10 = (): number | undefined => this.data.expenses.commissions
   l11 = (): number | undefined => this.data.expenses.contractLabor
   l12 = (): number | undefined => this.data.expenses.depletion
-  l13 = (): number | undefined => this.data.expenses.depreciation
+  l13 = (): number | undefined => {
+    // Priority: Calculated from assets -> Manual Entry
+    if (this.data.assets && this.data.assets.length > 0) {
+      return new F4562(this.f1040, this.data).totalDepreciation()
+    }
+    return this.data.expenses.depreciation
+  }
   l14 = (): number | undefined => this.data.expenses.employeeBenefitPrograms
   l15 = (): number | undefined => this.data.expenses.insurance
   l16a = (): number | undefined => this.data.expenses.mortgageInterest
@@ -163,8 +183,10 @@ export default class ScheduleC extends F1040Attachment {
         const tentativeDeduction = area * rate
         const limit = Math.max(0, this.l29() ?? 0)
         return Math.min(tentativeDeduction, limit)
+    } else if (this.data.homeOffice?.method === 'actual') {
+        return new F8829(this.f1040, this.data).allowableDeduction()
     }
-    return undefined // TODO: Form 8829 support
+    return undefined
   }
 
   l30 = (): number | undefined => this.homeOfficeDeduction()
@@ -289,9 +311,9 @@ export default class ScheduleC extends F1040Attachment {
         this.accountingMethodOther(), // 11
         this.materiallyParticipate(), // Radio 12-13
         this.started2021(), // Checkbox 14
-        this.payments1099(), // Radio 15-16
-        this.filed1099(), // Radio 17-18
-        this.statutoryEmployee(), // Checkbox 19 (Statutory employee income reported on W-2?)
+        this.statutoryEmployee(), // Checkbox 15 (Statutory employee income reported on W-2?)
+        this.payments1099(), // Radio 16-17
+        this.filed1099(), // Radio 18-19
 
         // Part I
         this.l1(),
